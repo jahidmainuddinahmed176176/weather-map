@@ -2,7 +2,7 @@
 
 ## Live Demo
 
-https://weather-map-jahid.vercel.app
+weather-map-wine-chi.vercel.app
 
 Click anywhere on the map to get real-time weather.
 
