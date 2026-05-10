@@ -41,7 +41,6 @@ export default function ClickableMap() {
     try {
       const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
       
-      // Current weather
       const weatherRes = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
       );
@@ -53,12 +52,10 @@ export default function ClickableMap() {
         description: weatherRes.data.weather[0].description,
       });
 
-      // 7-day forecast
       const forecastRes = await axios.get(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
       );
       
-      // Get one forecast per day (every 8th item = 24 hours)
       const dailyForecasts = forecastRes.data.list.filter((_: any, i: number) => i % 8 === 0).slice(0, 7);
       
       setForecast(dailyForecasts.map((item: any) => ({
@@ -69,13 +66,13 @@ export default function ClickableMap() {
       
     } catch (err: any) {
       console.error('Error:', err);
-      setError('Failed to load weather. Try again.');
+      setError('Failed to load weather');
     } finally {
       setLoading(false);
     }
   };
 
-    return (
+  return (
     <div className="relative h-screen w-full">
       <MapContainer
         center={[23.8103, 90.4125]}
@@ -89,28 +86,30 @@ export default function ClickableMap() {
         <MapClickHandler onLocationClick={getWeatherByCoordinates} />
       </MapContainer>
 
-      {/* Weather Panel - Simple Design */}
       {loading && (
         <div className="absolute bottom-4 left-4 right-4 bg-black/70 rounded-lg p-4 z-[1000]">
           <p className="text-white text-center">Loading...</p>
         </div>
       )}
 
+      {error && (
+        <div className="absolute bottom-4 left-4 right-4 bg-red-500/80 rounded-lg p-4 z-[1000]">
+          <p className="text-white text-center">{error}</p>
+        </div>
+      )}
+
       {weather && !loading && (
         <div className="absolute bottom-4 left-4 right-4 bg-black/70 backdrop-blur-sm rounded-lg p-4 z-[1000] text-white">
-          {/* Temperature */}
           <div className="text-center">
             <p className="text-5xl font-bold">{weather.temp}°C</p>
-            <p className="text-sm mt-1">{weather.description}</p>
+            <p className="text-sm mt-1 capitalize">{weather.description}</p>
           </div>
 
-          {/* Humidity & Wind */}
           <div className="flex justify-center gap-6 mt-3 text-sm">
             <div>💧 {weather.humidity}%</div>
             <div>💨 {weather.wind} km/h</div>
           </div>
 
-          {/* 7-Day Forecast */}
           {forecast.length > 0 && (
             <div className="flex justify-between mt-4 pt-3 border-t border-white/20">
               {forecast.map((day, i) => (
@@ -125,11 +124,11 @@ export default function ClickableMap() {
         </div>
       )}
 
-      {/* Instructions */}
-      {!weather && !loading && (
+      {!weather && !loading && !error && (
         <div className="absolute bottom-4 left-4 right-4 bg-black/50 rounded-lg p-3 z-[1000]">
           <p className="text-white text-center text-sm">Click anywhere on map</p>
         </div>
       )}
     </div>
   );
+}
