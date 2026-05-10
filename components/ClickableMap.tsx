@@ -75,7 +75,7 @@ export default function ClickableMap() {
     }
   };
 
-  return (
+    return (
     <div className="relative h-screen w-full">
       <MapContainer
         center={[23.8103, 90.4125]}
@@ -89,46 +89,37 @@ export default function ClickableMap() {
         <MapClickHandler onLocationClick={getWeatherByCoordinates} />
       </MapContainer>
 
-      {/* Weather Panel */}
+      {/* Weather Panel - Simple Design */}
       {loading && (
-        <div className="absolute bottom-4 left-4 right-4 bg-white rounded-lg shadow-xl p-4 z-[1000]">
-          <p className="text-center text-gray-500">Loading weather...</p>
-        </div>
-      )}
-
-      {error && (
-        <div className="absolute bottom-4 left-4 right-4 bg-red-100 rounded-lg shadow-xl p-4 z-[1000]">
-          <p className="text-center text-red-600">{error}</p>
+        <div className="absolute bottom-4 left-4 right-4 bg-black/70 rounded-lg p-4 z-[1000]">
+          <p className="text-white text-center">Loading...</p>
         </div>
       )}
 
       {weather && !loading && (
-        <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg shadow-xl p-4 z-[1000] space-y-3">
-          {/* Current Weather */}
+        <div className="absolute bottom-4 left-4 right-4 bg-black/70 backdrop-blur-sm rounded-lg p-4 z-[1000] text-white">
+          {/* Temperature */}
           <div className="text-center">
-            <p className="text-4xl font-bold">{weather.temp}°C</p>
-            <p className="capitalize text-gray-600">{weather.description}</p>
-            <div className="flex justify-center gap-6 mt-2 text-sm">
-              <div>💧 {weather.humidity}%</div>
-              <div>💨 {weather.wind} km/h</div>
-            </div>
+            <p className="text-5xl font-bold">{weather.temp}°C</p>
+            <p className="text-sm mt-1">{weather.description}</p>
+          </div>
+
+          {/* Humidity & Wind */}
+          <div className="flex justify-center gap-6 mt-3 text-sm">
+            <div>💧 {weather.humidity}%</div>
+            <div>💨 {weather.wind} km/h</div>
           </div>
 
           {/* 7-Day Forecast */}
           {forecast.length > 0 && (
-            <div className="border-t pt-3">
-              <p className="text-xs text-gray-500 text-center mb-2">7-Day Forecast</p>
-              <div className="flex justify-between gap-1">
-                {forecast.map((day, i) => (
-                  <div key={i} className="text-center">
-                    <p className="text-xs font-medium">{day.date}</p>
-                    <p className="text-xl">
-                      {day.icon === '01d' ? '☀️' : day.icon === '02d' ? '⛅' : '🌧️'}
-                    </p>
-                    <p className="text-sm font-bold">{day.temp}°</p>
-                  </div>
-                ))}
-              </div>
+            <div className="flex justify-between mt-4 pt-3 border-t border-white/20">
+              {forecast.map((day, i) => (
+                <div key={i} className="text-center">
+                  <p className="text-xs">{day.date}</p>
+                  <p className="text-lg">{day.icon === '01d' ? '☀️' : day.icon === '02d' ? '⛅' : '🌧️'}</p>
+                  <p className="text-sm font-bold">{day.temp}°</p>
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -136,10 +127,9 @@ export default function ClickableMap() {
 
       {/* Instructions */}
       {!weather && !loading && (
-        <div className="absolute bottom-4 left-4 right-4 bg-black/50 rounded-lg p-2 z-[1000]">
-          <p className="text-white text-center text-sm">Click anywhere on the map to see weather</p>
+        <div className="absolute bottom-4 left-4 right-4 bg-black/50 rounded-lg p-3 z-[1000]">
+          <p className="text-white text-center text-sm">Click anywhere on map</p>
         </div>
       )}
     </div>
   );
-}
