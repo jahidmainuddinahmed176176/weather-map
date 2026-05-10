@@ -15,7 +15,6 @@ L.Icon.Default.mergeOptions({
 });
 
 interface WeatherData {
-  name: string;
   temp: number;
   humidity: number;
   wind: number;
@@ -42,12 +41,9 @@ export default function ClickableMap() {
       const weatherRes = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY}`
       );
-      
-      const cityName = weatherRes.data.name || 'Unknown';
-      setClickedLocation(cityName);
+  
       
       setWeather({
-        name: cityName,
         temp: Math.round(weatherRes.data.main.temp),
         humidity: weatherRes.data.main.humidity,
         wind: Math.round(weatherRes.data.wind.speed),
@@ -82,7 +78,6 @@ export default function ClickableMap() {
 
       {weather && !loading && (
         <div className="absolute bottom-4 left-4 right-4 bg-white rounded-lg shadow-xl p-4 z-[1000]">
-          <h2 className="text-xl font-bold">{clickedLocation}</h2>
           <p className="text-3xl font-bold my-2">{weather.temp}°C</p>
           <p className="capitalize">{weather.description}</p>
           <div className="grid grid-cols-2 gap-4 mt-2">
