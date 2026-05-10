@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import 'leaflet/dist/leaflet.css';
 
 const ClickableMap = dynamic(() => import('@/components/ClickableMap'), {
   ssr: false,
